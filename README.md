@@ -5,4 +5,3 @@ f(n) = g(n) + h(n)
 
 注：启发值取当前节点与目标节点的错子个数
 
-[在线演示](https://github.com/Hinsurance/eightNode/blob/master/index.html "悬停显示")
