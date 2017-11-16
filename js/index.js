@@ -1,5 +1,4 @@
 $(function() {
-	
 	//点击确定按钮
 	$('#submit-btn').on('click',function() {
 		//清空右边结果
@@ -14,7 +13,6 @@ $(function() {
 
 		//获取初始节点、目标节点
 		start_end_node = getNode();
-		console.log(start_end_node);
 		start_node = start_end_node.start_node;
 		end_node = start_end_node.end_node;
 
@@ -27,10 +25,14 @@ $(function() {
 		expandNode(start_node,end_node,open_list,close_list);//扩展初始节点
 		sortOpenList(open_list);//重排open表
 
+		//判断是否到达目标节点
+		//是则输出
+		//否则继续扩展节点
 		ifReachEnd(start_node,end_node,open_list,close_list,result);
 		
 		//输出最佳路径
 		for (var i = result.length - 1; i >= 0; i--) {
+			//将节点中的'0'去掉
 			for (var j = result[i].values.length - 1; j >= 0; j--) {
 				if (result[i].values[j] == 0) {
 					result[i].values[j] = '';
@@ -38,26 +40,6 @@ $(function() {
 			}
 			printNode(result[i]);
 		}
-
-		//输出open表
-		// for (var i = open_list.length - 1; i >= 0; i--) {
-		// 	for (var j = open_list[i].values.length - 1; j >= 0; j--) {
-		// 		if (open_list[i].values[j] == 0) {
-		// 			open_list[i].values[j] = '';
-		// 		}
-		// 	}
-		// 	printNode(open_list[i]);
-		// }
-
-		//输出close表
-		// for (var i = close_list.length - 1; i >= 0; i--) {
-		// 	for (var j = close_list[i].values.length - 1; j >= 0; j--) {
-		// 		if (close_list[i].values[j] == 0) {
-		// 			close_list[i].values[j] = '';
-		// 		}
-		// 	}
-		// 	printNode(close_list[i]);
-		// }
 	})
 })
 
@@ -126,7 +108,6 @@ function fineZeroIndex(node) {
  */
 function g(cur,par) {
 	cur.g = par.g + 1;
-	//return cur.g;
 }
 
 /**
@@ -137,8 +118,6 @@ function g(cur,par) {
  * @return {number}     启发值
  */
 function h(cur,end) {
-	//console.log(cur);
-	//console.log(end);
 	var differ = 0;
 	for (var i = 0;i < 9;i++) {
 		if (cur.values[i] != end.values[i]) {
@@ -152,7 +131,6 @@ function h(cur,end) {
 		differ = differ - 1;
 	}
 	cur.h = differ;
-	//return cur.h;
 }
 
 /**
@@ -162,25 +140,7 @@ function h(cur,end) {
  */
 function f(cur) {
 	cur.f = cur.g + cur.h;
-	//return cur.f;
 }
-
-/**
- * 创建节点
- * 初始值与父节点相同
- * @param  {object} par 父节点对象
- * @return {object}     返回生成的节点对象
- */
-/*function createNode(par) {
-	console.log(par.values);
-	return {
-		values: par.values,//节点的值
-		parent: par,//父节点
-		g: -1,//创建节点后调用函数g(n)修改
-		h: -1,//创建节点后调用函数h(n)修改
-		f: -1//创建节点后调用函数f(n)修改
-	}
-}*/
 
 /**
  * 创建节点
@@ -193,16 +153,6 @@ function f(cur) {
  * @return {object}                生成的子节点
  */
 function childNode(par,end,zero_index,exchange_index,open_list) {
-
-	// var node = createNode(par);
-
-	/*var node = {};
-	node.values = par.values;
-	node.parent = par;
-	node.g = -1;
-	node.h = -1;
-	node.f = -1;*/
-
 	var node = cloneObjectFn(par);//若直接赋值 会影响原先对象的值
 	node.parent = par;
 	node.values[zero_index] = node.values[exchange_index];
@@ -221,13 +171,13 @@ function childNode(par,end,zero_index,exchange_index,open_list) {
 		}
 	}
 	
+	//更新子节点的耗散值 启发值 评估值
 	g(node,par);
 	h(node,end);
 	f(node);
 	
-	open_list.splice(0,0,node);//将新节点写入open表
-	//console.log(open_list);
-	//return node;
+	//将新节点写入open表
+	open_list.splice(0,0,node);
 }
 
 /**
@@ -236,7 +186,7 @@ function childNode(par,end,zero_index,exchange_index,open_list) {
  * @return {[type]}     [description]
  */
 function cloneObjectFn (obj){ // 对象复制
-    return JSON.parse(JSON.stringify(obj))
+    return JSON.parse(JSON.stringify(obj));
 }
 
 /**
@@ -248,7 +198,7 @@ function cloneObjectFn (obj){ // 对象复制
 function sortOpenList(open_list) {
 	var length = open_list.length,
 		temp = -1;
-	//console.log(length);
+	
 	for (var i = length - 1; i >= 0; i--) {
 		for (var j = 0;j < i;j++) {
 			if (open_list[j].f > open_list[j+1].f) {
@@ -258,7 +208,6 @@ function sortOpenList(open_list) {
 			}
 		}
 	}
-	//console.log(open_list);
 }
 
 /**
@@ -268,101 +217,107 @@ function sortOpenList(open_list) {
  * @return {[type]}           [description]
  */
 function deleteOpenNode(open_list,cur_node) {
-	//console.log(par);
 	var length = open_list.length;
 	for (var i = 0;i < length;i++) {
 		//删除已扩展节点
 		if (open_list[i] === cur_node) {
 			open_list.splice(i,1);
 		}
-		//删除与当前节点中与当前节点的父节点相同的子节点
-		/*if (par.values) {
-			if (open_list[i].values == par.values) {
-				open_list.splice(i,1);
-			}
-		}*/
-		
 	}
 }
 
-
+/**
+ * 扩展当前节点
+ * 更新open表 close表
+ * @param  {object} cur_node   当前节点
+ * @param  {object} end_node   目标节点
+ * @param  {array} open_list   open表
+ * @param  {array} close_list  close表
+ * @return {[type]}            [description]
+ */
 function expandNode(cur_node,end_node,open_list,close_list) {
 	var zero_index = fineZeroIndex(cur_node);
-	//console.log(zero_index);
+	
 	//扩展当前节点
 	if (zero_index == 0) {
 		childNode(cur_node,end_node,zero_index,1,open_list);
 		childNode(cur_node,end_node,zero_index,3,open_list);
-		deleteOpenNode(open_list,cur_node);
+		deleteOpenNode(open_list,cur_node);//从open表中删除已扩展节点
 		close_list.push(cur_node);//已扩展的父节点写入close表	
 	} else if (zero_index == 1) {
 		childNode(cur_node,end_node,zero_index,0,open_list);
 		childNode(cur_node,end_node,zero_index,2,open_list);
 		childNode(cur_node,end_node,zero_index,4,open_list);
 		deleteOpenNode(open_list,cur_node);
-		close_list.push(cur_node);//已扩展的父节点写入close表
+		close_list.push(cur_node);
 	} else if (zero_index == 2) {
 		childNode(cur_node,end_node,zero_index,1,open_list);
 		childNode(cur_node,end_node,zero_index,5,open_list);
 		deleteOpenNode(open_list,cur_node);
-		close_list.push(cur_node);//已扩展的父节点写入close表
+		close_list.push(cur_node);
 	} else if (zero_index == 3) {
 		childNode(cur_node,end_node,zero_index,0,open_list);
 		childNode(cur_node,end_node,zero_index,4,open_list);
 		childNode(cur_node,end_node,zero_index,6,open_list);
 		deleteOpenNode(open_list,cur_node);
-		close_list.push(cur_node);//已扩展的父节点写入close表
+		close_list.push(cur_node);
 	} else if (zero_index == 4) {
 		childNode(cur_node,end_node,zero_index,1,open_list);
 		childNode(cur_node,end_node,zero_index,3,open_list);
 		childNode(cur_node,end_node,zero_index,5,open_list);
 		childNode(cur_node,end_node,zero_index,7,open_list);
 		deleteOpenNode(open_list,cur_node);
-		close_list.push(cur_node);//已扩展的父节点写入close表
+		close_list.push(cur_node);
 	} else if (zero_index == 5) {
 		childNode(cur_node,end_node,zero_index,2,open_list);
 		childNode(cur_node,end_node,zero_index,4,open_list);
 		childNode(cur_node,end_node,zero_index,8,open_list);
 		deleteOpenNode(open_list,cur_node);
-		close_list.push(cur_node);//已扩展的父节点写入close表
+		close_list.push(cur_node);
 	} else if (zero_index == 6) {
 		childNode(cur_node,end_node,zero_index,3,open_list);
 		childNode(cur_node,end_node,zero_index,7,open_list);
 		deleteOpenNode(open_list,cur_node);
-		close_list.push(cur_node);//已扩展的父节点写入close表
+		close_list.push(cur_node);
 	} else if (zero_index == 7) {
 		childNode(cur_node,end_node,zero_index,4,open_list);
 		childNode(cur_node,end_node,zero_index,6,open_list);
 		childNode(cur_node,end_node,zero_index,8,open_list);
-		//从open表中删除已扩展节点
-		/*for (var i = 0;i < open_list.length;i++) {
-			if (open_list[i] === cur_node) {
-				open_list.splice(i,1);
-			}
-		}*/
 		deleteOpenNode(open_list,cur_node);
-		//open_list.splice(open_list.length - 1,1);//从open表中删除已扩展节点
-		//console.log(open_list);
-		close_list.push(cur_node);//已扩展的父节点写入close表	
+		close_list.push(cur_node);	
 	} else if (zero_index == 8) {
 		childNode(cur_node,end_node,zero_index,5,open_list);
 		childNode(cur_node,end_node,zero_index,7,open_list);
 		deleteOpenNode(open_list,cur_node);
-		close_list.push(cur_node);//已扩展的父节点写入close表
+		close_list.push(cur_node);
 	}
 }
 
+/**
+ * 找到最佳路径后的回溯函数
+ * @param  {object} node   当前节点
+ * @param  {array} result  存放最佳路径的数组
+ * @return {[type]}        [description]
+ */
 function ifReachRoot(node,result) {
 	result.push(node);
 	if (node.g == 0) {
 		console.log('回溯到根节点啦!');
-		console.log(result);
 		return false;
 	} else {
 		ifReachRoot(node.parent,result);
 	}
 }
 
+/**
+ * 搜索到达目标节点的过程
+ * @param  {object} start_node 初始节点
+ * @param  {object} end_node   目标节点
+ * @param  {array} 	open_list  open表
+ * @param  {array} 	close_list close表
+ * @param  {array} 	result     最佳路径
+ * @return {[type]}            [description]
+ */
 function ifReachEnd(start_node,end_node,open_list,close_list,result) {
 	cur_node = open_list[0];
 	if (cur_node.h == 0) {
@@ -370,61 +325,18 @@ function ifReachEnd(start_node,end_node,open_list,close_list,result) {
 		ifReachRoot(cur_node,result);
 	} else if (cur_node.h != 0) {//当前节点不等于目标节点
 		expandNode(cur_node,end_node,open_list,close_list);
-		//当前节点空格位置
-		/*var zero_index = fineZeroIndex(cur_node);
-		//console.log(zero_index);
-		//扩展当前节点
-		if (zero_index == 0) {
-			childNode(cur_node,end_node,zero_index,1,open_list);
-			childNode(cur_node,end_node,zero_index,3,open_list);
-			close_list.push(cur_node);//已扩展的父节点写入close表	
-		} else if (zero_index == 1) {
-			childNode(cur_node,end_node,zero_index,0,open_list);
-			childNode(cur_node,end_node,zero_index,2,open_list);
-			childNode(cur_node,end_node,zero_index,4,open_list);
-			close_list.push(cur_node);//已扩展的父节点写入close表
-		} else if (zero_index == 2) {
-			childNode(cur_node,end_node,zero_index,1,open_list);
-			childNode(cur_node,end_node,zero_index,5,open_list);
-			close_list.push(cur_node);//已扩展的父节点写入close表
-		} else if (zero_index == 3) {
-			childNode(cur_node,end_node,zero_index,0,open_list);
-			childNode(cur_node,end_node,zero_index,4,open_list);
-			childNode(cur_node,end_node,zero_index,6,open_list);
-			close_list.push(cur_node);//已扩展的父节点写入close表
-		} else if (zero_index == 4) {
-			childNode(cur_node,end_node,zero_index,1,open_list);
-			childNode(cur_node,end_node,zero_index,3,open_list);
-			childNode(cur_node,end_node,zero_index,5,open_list);
-			childNode(cur_node,end_node,zero_index,7,open_list);
-			close_list.push(cur_node);//已扩展的父节点写入close表
-		} else if (zero_index == 5) {
-			childNode(cur_node,end_node,zero_index,2,open_list);
-			childNode(cur_node,end_node,zero_index,4,open_list);
-			childNode(cur_node,end_node,zero_index,8,open_list);
-			close_list.push(cur_node);//已扩展的父节点写入close表
-		} else if (zero_index == 6) {
-			childNode(cur_node,end_node,zero_index,3,open_list);
-			childNode(cur_node,end_node,zero_index,7,open_list);
-			close_list.push(cur_node);//已扩展的父节点写入close表
-		} else if (zero_index == 7) {
-			childNode(cur_node,end_node,zero_index,4,open_list);
-			childNode(cur_node,end_node,zero_index,6,open_list);
-			childNode(cur_node,end_node,zero_index,8,open_list);
-			close_list.push(cur_node);//已扩展的父节点写入close表	
-		} else if (zero_index == 8) {
-			childNode(cur_node,end_node,zero_index,5,open_list);
-			childNode(cur_node,end_node,zero_index,7,open_list);
-			close_list.push(cur_node);//已扩展的父节点写入close表
-		}*/
 		//重排open_list
 		sortOpenList(open_list);
-		console.log(open_list);
-		console.log(close_list);
+		
 		ifReachEnd(start_node,end_node,open_list,close_list,result);
 	}
 }
 
+/**
+ * 输出最佳路径中的八数码节点
+ * @param  {[type]} node [description]
+ * @return {[type]}      [description]
+ */
 function printNode(node) {
 	var right_box = $('.right-box');
 	var item = $('<div class="node-box clearfix"></div>');
