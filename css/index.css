@@ -1,0 +1,110 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+html {
+	height: 100%;
+}
+body {
+	font-family: 'PingFang SC','Microsoft Yahei';
+	height: 100%;
+	position: relative;
+}
+.clearfix:after {
+	content: '\20';
+	display: block;
+	height: 0;
+	clear: both;
+}
+.clearfix {
+	zoom: 1;
+}
+
+.left-box {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 320px;
+	height: 100%;
+}
+.right-box {
+	/*width: 100%;*/
+	height: 100%;
+	padding-top: 20px;
+	margin-left: 320px;
+}
+
+/**
+ * 提示信息
+ */
+.title {
+	display: block;
+	margin: 10px 50px;
+}
+
+/**
+ * 初始状态 目标状态
+ */
+#s-box,
+#e-box {
+	width: 190px;
+	height: 190px;
+	margin: 10px 50px;
+}
+#s-box > input,
+#e-box > input {
+	display: block;
+	float: left;
+	width: 60px;
+	height: 60px;
+	font-size: 25px;
+	text-align: center;
+	outline: none;
+}
+
+/**
+ * 确定按钮
+ */
+#submit-btn {
+	padding: 8px 20px;
+	color: #ffffff;
+	background-color: #009688;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	margin-left: 50px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	-o-border-radius: 3px;
+	border-radius: 3px;
+	-webkit-transition: background-color .3s;
+	-moz-transition: background-color .3s;
+	-ms-transition: background-color .3s;
+	-o-transition: background-color .3s;
+	transition: background-color .3s;
+}
+#submit-btn:hover {
+	background-color: rgb(57,171,160);
+}
+
+/**
+ * 生成的每个八数码节点
+ */
+.node-box {
+	/*float: left;*/
+	width: 85px;
+	margin: 0 20px 20px;
+}
+.node-box > .node-box-items {
+	float: left;
+	width: 25px;
+	height: 25px;
+	line-height: 25px;
+	text-align: center;
+	border: 1px solid rgb(169,169,169);
+
+}
+.ghf {
+	color: rgb(153,153,153);
+}

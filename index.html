@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>A*算法实现八数码问题</title>
+	<link rel="stylesheet" type="text/css" href="css/index.css" />
+</head>
+<body>
+	<div class="left-box">
+		<!-- 起始节点 -->
+		<span class="title">请输入初始状态：</span>
+		<div id="s-box">
+			<input type="text" name="s0" id="s0" value="2" />
+			<input type="text" name="s1" id="s1" value="8" />
+			<input type="text" name="s2" id="s2" value="3" />
+			<input type="text" name="s3" id="s3" value="1" />
+			<input type="text" name="s4" id="s4" value="6" />
+			<input type="text" name="s5" id="s5" value="4" />
+			<input type="text" name="s6" id="s6" value="7" />
+			<input type="text" name="s7" id="s7" value="" />
+			<input type="text" name="s8" id="s8" value="5" />
+		</div>
+
+		<!-- 终止节点 -->
+		<span class="title">请输入目标状态：</span>
+		<div id="e-box">
+			<input type="text" name="e0" id="e0" value="1" />
+			<input type="text" name="e1" id="e1" value="2" />
+			<input type="text" name="e2" id="e2" value="3" />
+			<input type="text" name="e3" id="e3" value="8" />
+			<input type="text" name="e4" id="e4" value="" />
+			<input type="text" name="e5" id="e5" value="4" />
+			<input type="text" name="e6" id="e6" value="7" />
+			<input type="text" name="e7" id="e7" value="6" />
+			<input type="text" name="e8" id="e8" value="5" />
+		</div>
+
+		<!-- 确定按钮 -->
+		<button id="submit-btn">确定</button>
+	</div>
+	
+	<div class="right-box">
+		<!-- <div class="node-box clearfix">
+			<div class="node-box-items">2</div>
+			<div class="node-box-items">2</div>
+			<div class="node-box-items">2</div>
+			<div class="node-box-items">2</div>
+			<div class="node-box-items">2</div>
+			<div class="node-box-items">2</div>
+			<div class="node-box-items">2</div>
+			<div class="node-box-items">2</div>
+			<div class="node-box-items">2</div>
+			<div class="ghf">0+4=4</div>
+		</div> -->
+	</div>
+
+
+	<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="js/index.js"></script>
+</body>
+</html>
