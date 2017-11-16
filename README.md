@@ -5,3 +5,4 @@ f(n) = g(n) + h(n)
 
 注：启发值取当前节点与目标节点的错子个数
 
+demo:https://hinsurance.github.io/eightNode/
